@@ -14,7 +14,7 @@ This React Native project demonstrates a polished user interface with key featur
 
 Explore the project's visual aesthetics using the included Figma designs:
 
-[Figma Designs](https://www.figma.com/file/QEOWkm2ycr9FoYWPJyq0YO/HR-Management-App?type=design&node-id=0%3A1&mode=design&t=e6Zh9xBqVnE5x2p5-1)
+<a href="https://www.figma.com/file/QEOWkm2ycr9FoYWPJyq0YO/HR-Management-App?type=design&node-id=0%3A1&mode=design&t=e6Zh9xBqVnE5x2p5-1" target="_blank">Figma Designs</a>
 
 ## Important Note
 
