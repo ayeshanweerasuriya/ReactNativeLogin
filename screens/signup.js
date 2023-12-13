@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   View,
   Text,
@@ -5,18 +6,57 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // To save email and password
 
 const Signup = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmpassword] = useState("");
+  const [isEmail, setIsEmail] = useState(false);
   const navigation = useNavigation();
-  const handleLogin = () => {
-    navigation.navigate("Dashboard");
+
+  const handleEmail = (text) => {
+    setEmail(text);
+    setIsEmail(true);
+  };
+
+  const handlePassword = (text) => {
+    setPassword(text);
+  };
+
+  const handleConfirmpassword = (text) => {
+    setConfirmpassword(text);
+  };
+
+  const submit = async () => {
+    if (isEmail && password === confirmpassword) {
+      Alert.alert("Account created successfully");
+
+      // Save email and password to AsyncStorage
+      try {
+        await AsyncStorage.setItem("email", email);
+        await AsyncStorage.setItem("password", password);
+      } catch (error) {
+        console.error("Error saving authentication information:", error);
+      }
+      //
+
+      navigation.navigate("Login", {
+        bringemail: email,
+        bringpassword: password,
+      });
+    } else {
+      Alert.alert("Passwords are not matching! \n Please try again");
+    }
   };
 
   const handleSignin = () => {
     navigation.navigate("Login");
   };
+
   return (
     <View style={styles.container}>
       <Image
@@ -31,7 +71,12 @@ const Signup = () => {
             style={styles.inputIcon}
             source={require("../assets/username.png")}
           />
-          <TextInput style={styles.input} placeholder="Type your E-mail" />
+          <TextInput
+            style={styles.input}
+            placeholder="Type your E-mail"
+            value={email}
+            onChangeText={handleEmail}
+          />
         </View>
         <View style={styles.inputIconContainer}>
           <Image
@@ -42,6 +87,8 @@ const Signup = () => {
             style={styles.input}
             placeholder="Password"
             secureTextEntry
+            value={password}
+            onChangeText={handlePassword}
           />
         </View>
         <View style={styles.inputIconContainer}>
@@ -53,6 +100,8 @@ const Signup = () => {
             style={styles.input}
             placeholder="Confirm Password"
             secureTextEntry
+            value={confirmpassword}
+            onChangeText={handleConfirmpassword}
           />
         </View>
       </View>
@@ -62,7 +111,7 @@ const Signup = () => {
       <View>
         <View style={styles.signUpContainer}>
           <Text style={styles.signUptxt}>Signup</Text>
-          <TouchableOpacity onPress={handleLogin}>
+          <TouchableOpacity onPress={submit}>
             <Image
               style={styles.signUpBtn}
               source={require("../assets/signUp.png")}

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,12 +9,34 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // To save email and password
 
-const Login = () => {
+const Login = ({ route }) => {
+  const { bringemail, bringpassword } = route.params || {};
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+
+  // To save email and password
+  useEffect(() => {
+    // Load saved email and password from AsyncStorage
+    const loadAuthenticationInformation = async () => {
+      try {
+        const savedEmail = await AsyncStorage.getItem("email");
+        const savedPassword = await AsyncStorage.getItem("password");
+
+        if (savedEmail && savedPassword) {
+          setUsername(savedEmail);
+          setPassword(savedPassword);
+        }
+      } catch (error) {
+        console.error("Error loading authentication information:", error);
+      }
+    };
+
+    loadAuthenticationInformation();
+  }, []);
+  //
 
   const handleUsernameChange = (text) => {
     setUsername(text);
@@ -28,8 +51,8 @@ const Login = () => {
   };
 
   const handleFormSubmit = () => {
-    const correctUsername = "username";
-    const correctPassword = "password";
+    const correctUsername = bringemail;
+    const correctPassword = bringpassword;
 
     if (password === correctPassword && username === correctUsername) {
       Alert.alert("Welcome!");
