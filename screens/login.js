@@ -5,18 +5,43 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const handleLogin = () => {
-    navigation.navigate("Dashboard");
+
+  const handleUsernameChange = (text) => {
+    setUsername(text);
+  };
+
+  const handlePasswordChange = (text) => {
+    setPassword(text);
   };
 
   const handleSignup = () => {
     navigation.navigate("Signup");
   };
+
+  const handleFormSubmit = () => {
+    const correctUsername = "username";
+    const correctPassword = "password";
+
+    if (password === correctPassword && username === correctUsername) {
+      Alert.alert("Welcome!");
+      navigation.navigate("Dashboard");
+    } else {
+      Alert.alert("Your password or username incorrect");
+    }
+
+    setUsername("");
+    setPassword("");
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -31,7 +56,12 @@ const Login = () => {
             style={styles.inputIcon}
             source={require("../assets/username.png")}
           />
-          <TextInput style={styles.input} placeholder="Username" />
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            value={username}
+            onChangeText={handleUsernameChange}
+          />
         </View>
         <View style={styles.inputIconContainer}>
           <Image
@@ -42,6 +72,8 @@ const Login = () => {
             style={styles.input}
             placeholder="Password"
             secureTextEntry
+            value={password}
+            onChangeText={handlePasswordChange}
           />
         </View>
       </View>
@@ -51,7 +83,7 @@ const Login = () => {
       <View>
         <View style={styles.signInContainer}>
           <Text style={styles.signIntxt}>Login</Text>
-          <TouchableOpacity onPress={handleLogin}>
+          <TouchableOpacity onPress={handleFormSubmit}>
             <Image
               style={styles.signInBtn}
               source={require("../assets/signIn.png")}
